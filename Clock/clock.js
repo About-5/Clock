@@ -1,6 +1,6 @@
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
-let fontSize = 40;
+let fontSize = 100;
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -8,7 +8,6 @@ canvas.height = innerHeight;
 addEventListener("resize", function() {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
-    init();
 });
 
 function randomIntFromRange(min, max) {
@@ -29,23 +28,25 @@ Clock.prototype.draw = function() {
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = this.color;
     ctx.fillText(this.myTime, this.x, this.y);
+    ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
+    ctx.strokeText(this.myTime, this.x, this.y);
     ctx.shadowColor = '#E3EAEF';
     ctx.shadowBlur = 30;
-    ctx.stroke();
 }
 
 Clock.prototype.update = function() {
-    if(this.x + this.velocity.x + 270 > canvas.width || this.x + this.velocity.x < 0) {
+    if(this.x + this.velocity.x + (fontSize * 6.75) > canvas.width || this.x + this.velocity.x < 0) {
         this.velocity.x = -this.velocity.x;
         this.color = `rgb(${randomIntFromRange(0, 255)}, ${randomIntFromRange(0, 255)}, ${randomIntFromRange(0, 255)})`
     }
-    if(this.y + this.velocity.y > canvas.height || this.y + this.velocity.y - 30 < 0) {
+    if(this.y + this.velocity.y > canvas.height || this.y + this.velocity.y - (fontSize*.75) < 0) {
         this.velocity.y = -this.velocity.y;
         this.color = `rgb(${randomIntFromRange(0, 255)}, ${randomIntFromRange(0, 255)}, ${randomIntFromRange(0, 255)})`
     }
+
     this.x += this.velocity.x;
     this.y += this.velocity.y;
-    console.log(this.velocity);
     this.date = new Date();
     this.hour = this.date.getHours();
     this.min = this.date.getMinutes();
@@ -60,19 +61,15 @@ Clock.prototype.update = function() {
     this.draw();
 }
 
-function move() {
-
-}
-
 let currentTime;
 
 function init() {
-    currentTime = new Clock(canvas.width / 2 - fontSize / 2 - 135, canvas.height / 2 - fontSize / 2);
+    currentTime = new Clock(canvas.width / 2 - fontSize / 2 - (fontSize * 3), canvas.height / 2 - fontSize / 2);
 }
 function animate() {
     requestAnimationFrame(animate);
     
-    ctx.fillStyle = '#113542'
+    ctx.fillStyle = '#171e26'
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     currentTime.update();
     
